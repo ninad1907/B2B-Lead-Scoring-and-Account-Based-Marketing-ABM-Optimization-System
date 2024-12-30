@@ -1,0 +1,80 @@
+1. Write the function calculate_bills_to_use to calculate the bills usage
+
+Write the function calculate_bills_to_use that returns a dictionary with the bill denomination and how many bills to use. Examples:
+
+>>> calculate_bills_to_use(843)
+{500: 1, 100: 3, 50: 0, 25: 1, 10: 1, 5: 1, 1: 3}
+
+>>> calculate_bills_to_use(1763)
+{500: 3, 100: 2, 50: 1, 25: 0, 10: 1, 5: 0, 1: 3}
+
+>>> calculate_bills_to_use(177)
+{500: 0, 100: 1, 50: 1, 25: 1, 10: 0, 5: 0, 1: 2}
+
+>>> calculate_bills_to_use(355)
+{500: 0, 100: 3, 50: 1, 25: 0, 10: 0, 5: 1, 1: 0}
+
+>>> calculate_bills_to_use(10_988)
+{500: 21, 100: 4, 50: 1, 25: 1, 10: 1, 5: 0, 1: 3}
+
+=> >>> 1763 % 500
+263
+
+>>> 1763 - (1763 % 500)
+1500
+
+>>> 1500 / 500
+3
+
+>>> (1763 - (1763 % 500)) / 500
+3
+
+def calculate_bills_to_use(amount):
+    bills = [500, 100, 50, 25, 10, 5, 1]
+    used_bills = {}
+    for bill in bills:
+        bill_count = (amount - (amount % bill)) / bill
+        used_bills[bill] = int(bill_count)
+        amount -= (bill * bill_count)
+    return used_bills
+
+
+2. Write the function calculate_bills_to_use_advanced
+
+Write the function calculate_bills_to_use_advanced that receives two parameters: the amount to withdraw, and a dictionary with bills and their availability. For example:
+
+# There are no $100 bills
+>>> calculate_bills_to_use_advanced(163, {
+        500: 1,
+        100: 0,
+        50: 10,
+        25: 10,
+        10: 10,
+        5: 10,
+        1: 10
+    })
+{500: 0, 100: 0, 50: 3, 25: 0, 10: 1, 5: 0, 1: 3}
+
+# There are no $100 or $10 bills
+>>> calculate_bills_to_use_advanced(163, {
+        500: 1,
+        100: 0,
+        50: 10,
+        25: 10,
+        10: 0,
+        5: 10,
+        1: 10
+    })
+{500: 0, 100: 0, 50: 3, 25: 0, 10: 0, 5: 2, 1: 3}
+
+=> def calculate_bills_to_use_advanced(amount, bills):
+    used_bills = {}
+    for bill, available in bills.items():
+        bill_count = (amount - (amount % bill)) / bill
+
+        # new line:
+        bill_count = min(bill_count, available)
+
+        used_bills[bill] = int(bill_count)
+        amount -= (bill * bill_count)
+    return used_bills
