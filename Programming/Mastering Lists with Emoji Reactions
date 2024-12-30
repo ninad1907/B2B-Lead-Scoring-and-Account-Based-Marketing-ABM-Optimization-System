@@ -1,0 +1,276 @@
+1. Count the Total Number of Reactions
+
+Count the total number of reactions in the variable reactions. Each reaction is represented by an emoji, and you need to calculate the total number of emojis used as reactions across all messages.
+
+=> # Count the total number of reactions
+total_reactions = 0
+for reaction in reactions:
+    total_reactions += len(reaction[2])
+
+print(f"Total number of reactions: {total_reactions}")
+
+
+2. Find the message that has received the highest number of reactions.
+
+Find the message that has received the highest number of reactions. Return the message text along with the number of reactions it received.
+
+Write your answer in the input box below as a tuple containing the message text (as a string) and the number of reactions (as an integer).
+
+Example: For ['Wow!', 5] write Wow!, 5
+
+There is a single space after the comma.
+
+=> message_reaction_count = []
+
+for reaction in reactions:
+    message = reaction[1]
+    reaction_count = len(reaction[2])
+
+    found = False
+
+    for element in message_reaction_count:
+        if element[0] == message:
+            element[1] += reaction_count
+            found = True
+            break
+
+    if not found:
+        message_reaction_count.append([message, reaction_count])
+
+sorted(message_reaction_count, key=lambda e:e[1], reverse=True)[0]
+
+
+3. Find All Unique Reactions (Emojis)
+
+Create a list of unique reactions (emojis) used in the reactions list. Each emoji should appear only once in the final list. Store the unique emojis in a variable named unique_emojis lexicographically sorted in ascending order.
+
+=> unique_emojis = []
+
+for reaction in reactions:
+    emoji_list = reaction[2]
+    for emoji in emoji_list:
+        if emoji not in unique_emojis:
+            unique_emojis.append(emoji)
+
+unique_emojis.sort()
+
+print(f"Unique reactions: {unique_emojis}")
+
+
+4. How many emojis have not been reacted to?
+
+In the previous activity, you found all the unique emojis used in the reactions. Now, calculate how many emojis from the emojis list have not been reacted to in the reactions list.
+
+=> not_reacted_count = 0
+
+for emoji_detail in emojis:
+    if emoji_detail[1] not in unique_emojis:
+        not_reacted_count += 1
+
+print(f"Number of emojis not reacted to: {not_reacted_count}")
+
+
+5. How many times 🎉(party popper) has been used?
+
+Count the total number of times the 🎉 (party popper) emoji has been used as a reaction in the reactions list.
+
+Write your answer in the input box below as an integer.
+
+=> # Count the number of times 🎉 has been used 
+party_popper_count = 0
+
+for reaction in reactions:
+    party_popper_count += reaction[2].count('🎉')
+
+print(f"Number of times 🎉 has been used: {party_popper_count}")
+
+
+6. Identify messages that received no emoji reactions.
+
+Identify messages that received no emoji reactions. Create a list of messages that have not been reacted to by any user. Store the messages in a variable named messages_without_reactions sorted lexicographic in ascending order.
+
+=> # we can use message_reaction_count calculated in activity 2
+messages_without_reactions = []
+
+for message_and_count in message_reaction_count:
+    message = message_and_count[0]
+    reaction_count = message_and_count[1]
+    if reaction_count == 0 and message not in messages_without_reactions:
+        messages_without_reactions.append(message)
+
+messages_without_reactions.sort()
+print(f"Messages without reactions: {messages_without_reactions}")
+
+
+7. How many reactions each person has made across all messages.
+
+Calculate the total number of reactions each person has made across all messages. Create a nested list where each entry contains the person's name and the total number of reactions they have made. Store the results in a variable named reactions_per_person sorted in descending order based on the number of reactions and if the number of reactions is the same, sort them lexicographically in ascending order based on the person's name.
+
+Expected outcome:
+
+Your output list should look like this:
+
+reaction_per_person = [
+    ['Alice', 12],
+    ['Bob', 10],
+    ['Charlie', 8],
+    # ... and more
+]
+
+> The values in the expected list are not accurate and are for illustrative purposes only.
+
+=> reactions_per_person = []
+
+for reaction in reactions:
+    person_name = reaction[0]
+    number_of_reactions = len(reaction[2])
+
+    person_found = False
+
+    for person in reactions_per_person:
+        if person[0] == person_name:
+            person[1] += number_of_reactions
+            person_found = True
+            break
+
+    if not person_found:
+        reactions_per_person.append([person_name, number_of_reactions])
+
+reactions_per_person.sort(key=lambda e: (-e[1], e[0]))
+
+print(f"Reactions per person: {reactions_per_person}")
+
+
+8. Find out who has reacted the most times across all messages.
+
+Find out who has reacted the most times across all messages. Return the person's name along with the total number of reactions they have made. If there are multiple people with the same highest number of reactions, write the name of the person who appears first in lexicographic order.
+
+Write your answer in the input box below as a below:
+
+Example: Person Name, 5
+
+=> # Find the person who reacted the most
+most_reactions_person = reactions_per_person[0]
+
+print(f"Person who reacted the most: {most_reactions_person[0]}, {most_reactions_person[1]}")
+
+
+9. Find All Messages Reacted by a Specific Person
+
+Find all messages reacted to by a Sophia. Create a list of unique messages that have been reacted to by Sophia. Store the messages in a variable named messages_reacted_by_sophia sorted lexicographically in ascending order.
+
+=> messages_reacted_by_sophia = []
+person_to_find = "Sophia"
+
+for reaction in reactions:
+    person = reaction[0]
+    message = reaction[1]
+    if person == person_to_find and message not in messages_reacted_by_sophia:
+        messages_reacted_by_sophia.append(message)
+
+messages_reacted_by_sophia.sort()
+print(f"Messages reacted by {person_to_find}: {messages_reacted_by_sophia}")
+
+
+10. 
+Identify the most frequently used emoji across all reactions.
+
+Identify the most frequently used emoji across all reactions. Select the correct option from the choices below.
+
+
+👍
+
+
+😂
+
+
+👏
+
+
+😀
+
+=> # Identify the most frequently used emoji, find only using list
+emoji_counts = []  # It's a nested list with emoji and count
+
+for emoji in unique_emojis:
+    emoji_count = 0
+    for reaction in reactions:
+        emoji_count += reaction[2].count(emoji)
+    emoji_counts.append([emoji, emoji_count])
+
+most_frequent_emoji = max(emoji_counts, key=lambda x: x[1])
+
+print(f"Most frequently used emoji: {most_frequent_emoji[0]}")
+
+
+11. 
+Count the total number of different people who have made reactions.
+
+Count the total number of different people who have made reactions across all messages. Write your answer in the input box below as an integer.
+
+=> # Count the total number of different people who have made reactions
+people = []
+
+for reaction in reactions:
+    if reaction[0] not in people:
+        people.append(reaction[0])
+
+print(f"Total number of different people who reacted: {len(people)}")
+
+
+12. Count How Many Messages Were Reacted with a Specific Emoji
+
+Count how many messages were reacted to with the 😂 (face with tears of joy) emoji. Write your answer in the input box below as an integer.
+
+=> # Step 1: create a list that tracks unique emoji reactions to each message
+# this is very important to avoid over-counting where different people reacted with specific emoji to same message
+
+message_reaction_list = []
+
+for reaction in reactions:
+    message = reaction[1]
+    emoji_list = reaction[2]
+
+    message_found = False
+
+    for element in message_reaction_list:
+        if element[0] == message:
+            for emoji in emoji_list:
+                if emoji not in element[1]:
+                    element[1].append(emoji)
+            message_found = True
+            break
+
+    if not message_found:
+        message_reaction_list.append([message, emoji_list])
+
+message_reaction_list
+
+# step 2:
+# Count how many messages were reacted to with the 😂 emoji
+messages_reacted_to_with_emoji = 0
+
+for message_and_reactions in message_reaction_list:
+    if '😂' in message_and_reactions[1]:
+        messages_reacted_to_with_emoji += 1
+
+print(f"Number of messages reacted to with the 😂 emoji: {messages_reacted_to_with_emoji}")
+
+
+13. Find and list all messages that have total one emoji reaction.
+
+Find and list all messages that have total one emoji reaction. Create a list of messages that have total one emoji reaction and store them in a variable named messages_with_one_reaction sorted lexicographically in ascending order.
+
+=> # we can use message_reaction_count calculated in activity 2,
+
+messages_with_one_reaction = []
+
+for message_and_reactions in message_reaction_count:
+    message = message_and_reactions[0]
+    reaction_count = message_and_reactions[1]
+    if reaction_count == 1 and message not in messages_with_one_reaction:
+        messages_with_one_reaction.append(message)
+
+messages_with_one_reaction.sort()
+print(f"Messages with only one reaction: {messages_with_one_reaction}")
+
