@@ -1,0 +1,16 @@
+1. Check your nonogram_sequence function
+
+Use the Check Activity button to validate your code. Don't worry if it fails, you can check your submission as many times as desired.
+
+=> def nonogram_sequence(binary_array):
+    sequence = []
+    counter = 0
+    for num in binary_array:
+        if num == 1:
+            counter += 1
+        elif counter != 0:
+            sequence.append(counter)
+            counter = 0
+    if counter:
+        sequence.append(counter)
+    return sequence
