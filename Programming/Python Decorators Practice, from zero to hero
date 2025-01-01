@@ -1,0 +1,155 @@
+1. The double decorator
+
+Write the decorator double, that will double the return value of any function that returns a numeric value. Example:
+
+@double
+def add(x, y):
+    return x + y
+
+add(2, 3)  # 10 (double of 5)
+add(-3, 2) # -2 (double of -1)
+
+=> def double(fn):
+    @wraps(fn)
+    def wrapped(a, b):
+        return fn(a, b) * 2
+    return wrapped
+
+
+2. Implement the check_numeric decorator
+
+Write the decorator check_numeric that, when applied to a function, will check that ALL the parameters passed are of numeric type (that is, int, float, Decimal, Rational, etc). If any parameter is NOT numeric, the function should raise a ValueError exception.
+
+Example:
+
+def add(x, y):
+    return x + y
+
+add("a", "b") # this works, produces: "ab"
+
+@check_numeric
+def add(x, y):
+    return x + y
+
+add("a", "b") # this now FAILS! Raises ValueError
+
+add(3, 2) # This works
+add(3, 2.5) # This works
+
+# `check_numeric` should work with any number of arguments
+@check_numeric
+def add(*args):
+    # This doesn't work for strings, but just for the sake of the example
+    return sum(args)
+
+add(7, 2, 1, 3) # works
+add("Hello", "World", "Goodbye", "World")  # Fails!
+
+=> import numbers
+from functools import wraps
+
+def check_numeric(fn):
+    @wraps(fn)
+    def wrapped(*args):
+        for arg in args:
+            if not isinstance(arg, numbers.Number):
+                raise ValueError("The argument is not numeric")
+        return fn(*args)
+    return wrapped
+
+
+3. Implement the enforce_type decorator, as a function decorator
+
+The enforce_type decorator receives a parameter, the type to enforce in the function, and raises a ValueError if the decorated function is invoked with arguments that are not of the indicated type.
+
+Important! The enforced_type decorator must be defined as a function, and, as usual, preserve the original's function's docs and name.
+
+Example:
+
+@enforce_type(int)
+def add(x, y):
+    return x + y
+
+add(2, 3) # Works
+add(2.5, 3) # Fails! 2.5 is float, not `int`
+add("a", "b") # Fails!
+
+=> def enforce_type(valid_type):
+    def inner(fn):
+        @wraps(fn)
+        def wrapped(*args):
+            for arg in args:
+                if type(arg) != valid_type:
+                    raise ValueError("The argument has the incorrect type")
+            return fn(*args)
+        return wrapped
+    return inner
+
+
+4. 
+Implement the enforce_type_class decorator, as a class decorator
+
+The enforce_type_class decorator works in the same way as the previous decorator, but this time must be re-implemented as a class.
+
+=> class enforce_type_class:
+    def __init__(self, valid_type):
+        self.valid_type = valid_type
+
+    def __call__(self, fn):
+        @wraps(fn)
+        def wrapped(*args):
+            for arg in args:
+                if type(arg) != self.valid_type:
+                    raise ValueError("The argument has the incorrect type")
+            return fn(*args)
+        return wrapped
+
+
+5. Implement the memoize decorator as a function decorator
+
+Memoization is a Computer Science concept similar to "caching". Your job is to implement the memoize decorator that will keep track of all the times the function was invoked, and the returned result. When a function is decorated with memoize, it'll have a special attribute (yes, the function) named previous_calls that will have all the previous invocations with both the arguments passed and the results produced.
+
+This decorator should be defined as a function, and, as usual, it should preserve the original function's name and docs.
+
+The previous_call attribute should be a list, and the invocations should be kept logged as dictionaries. See examples:
+
+@memoized
+def add(x, y):
+    return x + y
+
+Now the invocations
+
+>>> add(2, 3)
+5
+
+>>> add.previous_calls
+[{
+    "arguments": (2, 3),
+    "result": 5
+}]
+
+>>> add(1, 1)
+2
+
+>>> add.previous_calls
+[{
+    "arguments": (2, 3),
+    "result": 5
+}, {
+    "arguments": (1, 1),
+    "result": 2
+}]
+
+def memoize(fn):
+    @wraps(fn)
+    def wrapped(*args):
+        result = fn(*args)
+        wrapped.previous_calls.append({
+            "arguments": args,
+            "result": result
+        })
+        return result
+    wrapped.previous_calls = []
+    return wrapped
+
+
