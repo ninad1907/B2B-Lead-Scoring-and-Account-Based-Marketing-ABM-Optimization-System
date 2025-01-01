@@ -1,0 +1,57 @@
+1. Performance evaluation
+
+What is accuracy of training and testing data?
+
+Round to two decimal places
+
+The accuracy of the test set is 0.90
+
+The accuracy of the test set is 0.80
+
+The accuracy of the train set is 0.78
+
+The accuracy of the test set is 0.90
+
+=> The accuracy of the test set is 0.90
+
+The accuracy of the test set is 0.90
+
+
+2. Test time versus train time
+
+k-NN algorithm does more computation on test time rather than train time.
+
+No
+
+Yes
+
+=> Yes
+
+
+3. KNN uses
+
+Which of the following option is true about KNN algorithm?
+
+It can be used in both classification and regression
+
+It can be used for regression
+
+It can be used for classification
+
+=> It can be used in both classification and regression
+
+
+4. 
+Assumptions
+
+Which of the following statement is true about KNN algorithm ?
+
+KNN performs much better if all of the data have the same scale.
+
+KNN works well with a small number of input variables.
+
+k-NN makes assumptions about the functional form of the problem being solved.
+
+=> KNN performs much better if all of the data have the same scale.
+
+KNN works well with a small number of input variables.
