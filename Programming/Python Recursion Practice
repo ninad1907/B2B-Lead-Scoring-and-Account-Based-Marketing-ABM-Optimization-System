@@ -1,0 +1,101 @@
+1. Implement the power operation as a recursive function
+
+Implement the traditional power operation (which is natively implemented in Python with the ** operator) in a recursive way, using only the multiplication primitive (*). Example:
+
+>>> power(2, 3)
+8
+>>> power(5, 2)
+25
+>>> power(3, 0)
+1
+Note: don't worry about negative or decimal exponents. You can expect always positive integers.
+
+=> def power(n, e):
+    if e == 0:
+        return 1
+    return n * power(n, e - 1)
+
+
+2. mplement the cumsum function recursively
+
+The cumulative sum of a sequence of numbers is a running total that adds up the elements in the sequence as it progresses. Given a list of numbers, the cumulative sum at each position is computed by adding the sum of all previous numbers in the list up to the current position, including the number at the current position itself.
+
+For example, if you have a list of numbers [4, 6, 12], the cumulative sums would be:
+
+1) At position 1: `4` (there are no previous numbers, so it's just 4)
+2) At position 2: `4 + 6 = 10` (the sum of the first number and the second number)
+3) At position 3: `10 + 12 = 22` (the sum of the cumulative sum up to position 2 and the third number)
+Resulting in a cumulative sum sequence of [4, 10, 22].
+
+Your task is to write a recursive function in Python that calculates the cumulative sum of a list of numbers. The function should accept a single list as an argument and return a new list containing the cumulative sums.
+
+In this particular case, we'll define two functions, one is cumsum, and we'll call it a "shell", because it's the public interface that your users will use. The second one is recursive_cumsum, and we usually refer to this one as the "worker" or "helper" function. The good news is that cumsum is already defined (and you should NOT change it!).
+
+The recursive_cumsum helper function takes three parameters:
+
+numbers: the original list of numbers
+index: an index counter that keeps track of the current position for each recursive call
+accu - an "accumulator", an list that is keeping track of the cumsum in each recursive call
+You'll notice that the cumsum (shell) function then is just invoking recursive_cumsum with initialized values of index=0 and accu=[]. This is a very common practice in recursion.
+
+=> def cumsum(numbers):
+    return recursive_cumsum(numbers, index=0, accu=[])
+
+def recursive_cumsum(numbers, index, accu):
+    if index == len(numbers):
+        return accu
+
+    if index == 0:
+        accu.append(numbers[index])
+    else:
+        accu.append(accu[-1] + numbers[index])
+
+    return recursive_cumsum(numbers, index + 1, accu)
+
+cumsum([4, 6, 12])
+
+
+3. 
+Implement Fibonacci as a recursive function
+
+The Fibonacci sequence is a famous mathematical series where each number is the sum of the two preceding ones. It begins with 0 and 1, and every number after that is derived from adding the two numbers before it. For example, here are the first few terms of the Fibonacci Sequence:
+
+0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...
+They can be explained in this way:
+
+- `fibonacci(0)` ⟶ `0` (the 0th term)
+- `fibonacci(1)` ⟶ `1` (the 1st term)
+- `fibonacci(2)` ⟶ `1` (the 2nd term, since 0 + 1 = 1)
+- `fibonacci(3)` ⟶ `2` (the 3rd term, since 1 + 1 = 2)
+- `fibonacci(4)` ⟶ `3` (the 4th term, since 1 + 2 = 3)
+- `fibonacci(5)` ⟶ `5` (the 5th term, since 2 + 3 = 5)
+- `fibonacci(6)` ⟶ `8` (the 6th term, since 3 + 5 = 8)
+
+Write a Python function named fibonacci that takes a single integer argument n and returns the n-th number in the Fibonacci sequence. The function should define its behavior recursively, meaning that the function should call itself with adjusted arguments to compute the result.
+
+=> def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+
+4. 
+Implement reverse_a_string recursively
+
+The function reverse_a_string does what its name implies: it receives a string and returns it reversed. Similar to what you can natively do in Python with s[::-1]. Your job is to write it recursively!
+
+=> def reverse_string(s):
+    if not s:
+        return s
+
+    return reverse_string(s[1:]) + s[0]
+
+
+5. Implement the factorial function
+
+The factorial of a number n (expressed as n!) is defined as the product of n and all the integers below it, with factorial zero (0!) being equal to 1. Implement it using recursion. You can test it by validating that the results of your function match the ones in the natively implemented math.factorial. But hey! You can't use math.factorial 😉.
+
+=> def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n - 1)
