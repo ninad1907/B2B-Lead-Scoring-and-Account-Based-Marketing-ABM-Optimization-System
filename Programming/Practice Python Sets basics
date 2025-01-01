@@ -31,7 +31,7 @@ False
 
 True
 
-=> True
+=> False
 
 s1.issubset(s2)
 
