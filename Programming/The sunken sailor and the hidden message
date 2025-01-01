@@ -1,0 +1,21 @@
+1. 
+What's the hidden message written by the sunken sailor?
+
+Found the message? Type it here and reveal it to the world!
+
+Note: the message doesn't contain any punctuation signs. It contains whitespaces only between the words. That is, don't include whitespaces before or after the first or last word.
+
+>>> message
+apcinsfcs achzi ffqge obbmmm ajrfe...
+
+>>> message.split() # this is our magic function
+['apcinsfcs', 'achzi', 'ffqge', 'obbmmm', 'ajrfe', ...]
+
+=> when are we meeting
+
+hidden_message = []
+for word in message.split():
+    if word in known_english_words:
+        hidden_message.append(word)
+
+print(" ".join(hidden_message))
