@@ -1,0 +1,115 @@
+1. 
+Write a function that generates a random particle
+
+Write the function generate_particle that generates a particle according to the previous definition. The function accepts three parameters max_x, max_y, max_r which by default take the constants above and returns a tuple with (x, y, r).
+
+Example:
+
+>>> generate_particle()
+(391.8484862104256, 92.86444985326192, 0.7227983373572378)
+
+>>> generate_particle(10, 10, 1)
+(5.184593462659739, 3.5388971902026602, 0.8641652792107458)
+
+=> def generate_particle(max_x=MAX_X_POSITION, max_y=MAX_Y_POSITION, max_r=MAX_PARTICLE_RADIUS):
+    return (
+        random.random() * max_x,
+        random.random() * max_y,
+        random.random() * max_r,
+    )
+
+
+2. Generate 1,000 random particles using random.seed(10)
+
+Generate a list of 1,000 random particles with the default values for max_x, max_y and max_r, and store them in the particles variable.
+
+IMPORTANT: We'll validate your program by comparing it with the expected result of the same generation with random.seed(10), so make sure you're using setting the correct seed before generating the particles.
+
+=> random.seed(10)
+particles = [generate_particle() for _ in range(1_000)]
+
+
+3. Store your particles in a CSV file
+
+Store the data from particles in a CSV file named particles.csv, with the header x,y,r. You can use any method, including Pandas, manual CSV handling, etc. Here's an example header of the particles.csv file:
+
+x,y,r
+399.98181628293946,214.4445273375573,2.890456505672352
+144.2687624976512,406.66062567866004,4.117944362667227
+457.43077373082303,80.11477825940983,2.603346798199623
+
+=> pd.DataFrame(particles, columns=['x', 'y', 'r']).to_csv('particles.csv', index=False)
+
+
+4. Plot your particles in a matplotlib plane
+
+Plot your particles in a dot-plot, each particle centered in x, y and with a marker size of r.
+
+Warning! don't change the fig, or ax variables or the figsize defined.
+
+=> fig, ax = plt.subplots(figsize=(14, 7))
+
+for (x, y, r) in particles:
+    ax.plot(x, y, marker='o', markersize=r)
+
+
+5. Write the function calculate_particle_position
+
+The function calculate_particle_position receives two tuples, with the particle's and area's x, y, r parameters and it should return the position of the particle (either completely contained, partially contained, or outside) in the form of an Enum as its defined below:
+
+from enum import Enum
+
+class ParticlePosition(Enum):
+    PARTIALLY_CONTAINED = 1
+    COMPLETELY_CONTAINED = 2
+    OUTSIDE = 3
+
+=> def calculate_particle_position(p, A):
+    px, py, pr = p
+    ax, ay, ar = A
+
+    d = math.sqrt((px - ax) ** 2 + (py - ay) ** 2)
+    # Condition for fully contained
+    if d + pr <= ar:
+        return ParticlePosition.COMPLETELY_CONTAINED
+    # Condition for just touching or partially contained
+    elif d < ar + pr:
+        return ParticlePosition.PARTIALLY_CONTAINED
+    # Condition for outside the area
+    else:
+        return ParticlePosition.OUTSIDE
+
+
+6. Plot the particles according to their position
+
+Read the particles from particles.csv and plot them using special colors depending if the particle is fully contained, partially contained or not contained at all in the area A (325, 225, 50)
+
+If the particle is fully contained, it should be colored green, if it's partially contained, it should be colored red, while if it's outside, it should be black.
+
+Your plot should look something like:
+
+=> particles_df = pd.read_csv('particles.csv')
+
+A = (325, 225, 50)
+ax, ay, ar = A
+
+fig, axis = plt.subplots(figsize=(10, 10))
+
+area = plt.Circle((ax, ay), ar, color='r', fill=False, label='Area')
+axis.add_patch(area)
+
+for p in particles_df.values:
+    px, py, pr = p
+    position = calculate_particle_position(p, A)
+    color = {
+        ParticlePosition.PARTIALLY_CONTAINED: "red",
+        ParticlePosition.COMPLETELY_CONTAINED: "green",
+        ParticlePosition.OUTSIDE: "black"
+    }[position]
+
+    axis.plot(px, py, marker='o', markersize=pr, color=color)
+
+axis.set_xlim((0, 710))
+axis.set_ylim((0, 510))
+
+
