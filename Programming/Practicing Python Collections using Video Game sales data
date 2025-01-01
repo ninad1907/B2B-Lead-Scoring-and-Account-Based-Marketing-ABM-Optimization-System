@@ -1,0 +1,645 @@
+In this project, we will explore a fascinating dataset containing information about popular video games and explore apply different Python collection techniques to explore, reshape and transform the data. The data we will be working with contains information like the name of the game, the platform it was released on, the year it was released, the genre of the game, the publisher, sales figures in different regions and the global sales figure.
+
+Here is the overview of the data in variable games, which is a list of dictionaries:
+
+[
+    {  "rank": 1,  "name": "Wii Sports",  "platform": "Wii",  "year": 2006, ... },
+    {  "rank": 2,  "name": "Super Mario Bros.",  "platform": "NES",  "year": 1985, ... },
+    {  "rank": 3,  "name": "Mario Kart Wii",  "platform": "Wii",  "year": 2008, ... },
+    {  "rank": 4,  "name": "Wii Sports Resort",  "platform": "Wii",  "year": 2009.0, ... },
+    {  "rank": 5,  "name": "Pokemon Red/Pokemon Blue",  "platform": "GB",  "year": 1996, ... },
+    ...
+]
+
+1. Calculate the Total number of games published by Nintendo
+
+Determine and input the aggregate number of games that Nintendo has published. This should be presented as an integer value.
+
+Please note that you should count the games by their unique name, rather than by their rank.
+
+=> 662
+
+nintendo_games = set()
+
+for game in games:
+    publisher = game['publisher']
+    if publisher == 'Nintendo':
+        nintendo_games.add(game['name'])        
+
+len(nintendo_games)
+
+
+2. Game with Highest Global Sales
+
+Enter the name of a game with the highest global sales as a string.
+
+=> Wii Sports
+
+max_global_sales = 0
+max_global_sales_game = ''
+
+for game in games:
+    global_sales = game['global_sales']
+    if global_sales > max_global_sales:
+        max_global_sales = global_sales
+        max_global_sales_game = game['name']
+
+max_global_sales_game
+
+
+3. Total number of games released in year 2012
+
+Enter the total number of games released in year 2012 as an integer.
+
+Count unique games by name and not by rank.
+
+=> 447
+
+games_2012 = set()
+
+for game in games:
+    year = game['year']
+    if year == 2012:
+        games_2012.add(game['name'])
+
+len(games_2012)
+
+
+4. What are the top 10 best-selling video games globally, and their corresponding sales figures?
+
+Create a dictionary top_10_games with the name of the game as key and the global sales as value.
+
+If there are multiple games with the same name, then the game with the highest global sales should be considered.
+
+Example expected output:
+
+{'Wii Sports': 82.74,
+ 'Super Mario Bros.': 40.24,
+ 'Mario Kart Wii': 35.82,
+ 'Wii Sports Resort': 33.0,
+  ...
+}
+
+=> games_with_sales = {}
+
+for game in games:
+    name = game['name']
+    global_sales = game['global_sales']
+    games_with_sales.setdefault(name, 0)
+    # If there are multiple games with the same name, then the game with the highest global sales should be considered.
+    if global_sales > games_with_sales[name]:
+        games_with_sales[name] = global_sales
+
+# Sort the games by their global sales using basic looping
+top_10_games = {}
+for i in range(10):
+    max_global_sales = 0
+    max_global_sales_game = ''
+    for game, global_sales in games_with_sales.items():
+        if global_sales > max_global_sales:
+            max_global_sales = global_sales
+            max_global_sales_game = game
+    top_10_games[max_global_sales_game] = max_global_sales
+    del games_with_sales[max_global_sales_game]
+
+top_10_games
+
+
+5. What is the minimum value of the global_sales and which platform sold such low sales
+
+Your input should be formatted as platform: global_sales e.g PS2: 2.69.
+
+=> PC:0.01
+
+min_global_sales = float('inf')
+min_global_sales_platform = ''
+
+for game in games:
+    global_sales = game['global_sales']
+    if global_sales < min_global_sales:
+        min_global_sales = global_sales
+        min_global_sales_platform = game['platform']
+
+print(f"{min_global_sales_platform}: {min_global_sales}")
+
+
+6. Creating Nested Dictionaries for Total Sales and Game Count
+
+Create a dictionary called platform_sales, which will consist of nested dictionaries. Each nested dictionary will have two key-value pairs: one with the key total_sales and its corresponding value, and another with the key game_count and its corresponding value."
+
+{'2600': {'total_sales': 97.08000000000003, 'game_count': 133},
+ 'PSP': {'total_sales': 296.2799999999948, 'game_count': 1213},
+ 'XOne': {'total_sales': 141.05999999999995, 'game_count': 213},
+ 'GC': {'total_sales': 199.3600000000007, 'game_count': 556},
+ 'WiiU': {'total_sales': 81.86000000000006, 'game_count': 143},
+ 'GEN': {'total_sales': 28.360000000000003, 'game_count': 27},
+ ...
+ }
+
+=> platform_sales = {}
+
+for game in games:
+    platform = game['platform']
+    global_sales = game['global_sales']
+    platform_sales.setdefault(platform, {'total_sales': 0, 'game_count': 0})
+    platform_sales[platform]['total_sales'] += global_sales
+    platform_sales[platform]['game_count'] += 1
+
+platform_sales
+
+
+7. 
+What is the distribution of global_sales across different platforms?
+
+Create a list distribution which will have a tuple with the Name of the Platform and its percentage.
+
+Percentage will be the Platform's Global_Sales / Total Global_Sales
+
+If one platform has multiple games, then the platform's global sales will be the sum of all the games' global sales.
+
+Example expected output:
+
+[('Wii', 0.10324706053242479),
+ ('NES', 0.028491926322942094),
+ ('GB', 0.028872091030720227),
+ ('DS', 0.09293154652136922),
+ ('X360', 0.11003214945124726),
+ ('PS3', 0.10773413890423011),
+ ('PS2', 0.1399755105838838),
+  ...
+]
+
+=> distribution = []
+
+# Calculate the total sales for all platforms
+total_sales_all_platforms = 0
+for game in games:
+    total_sales_all_platforms += game['global_sales']
+
+# Calculate the percentage of sales for each platform
+for platform, sales in platform_sales.items():
+    distribution.append((platform, sales['total_sales'] / total_sales_all_platforms))
+
+distribution
+
+
+8. Which genre has the highest total sales in North America i.e na_Sales?
+
+Enter the name of the genre with highest total sales in North America as a string.
+
+=> Action
+
+genre_sales = {}
+
+for game in games:
+    genre = game['genre']
+    na_sales = game['na_sales']
+    genre_sales.setdefault(genre, 0)
+    genre_sales[genre] += na_sales
+
+top_genre = max(genre_sales, key=genre_sales.get)
+print(top_genre)
+
+
+9. 
+Select Publishers with global_sales Over 1 Million Copies
+
+Create a dictionary publisher_game_count where the keys are the publishers and the values are the counts of global_sales greater than 1.0 (million).
+
+Example expected output:
+
+{ 'Take-Two Interactive': 91,
+ 'Sony Computer Entertainment': 147,
+ 'Activision': 161,
+ 'Ubisoft': 114,
+ 'Bethesda Softworks': 22,
+ 'Electronic Arts': 338,
+ 'Sega': 74,
+ 'SquareSoft': 19,
+ 'Atari': 42,
+ '505 Games': 7,...
+}
+
+=> publisher_game_count = {}
+
+for game in games:
+    publisher = game['publisher']
+    global_sales = game['global_sales']
+    if global_sales > 1.0:
+        publisher_game_count.setdefault(publisher, 0)
+        publisher_game_count[publisher] += 1    
+
+publisher_game_count
+
+
+10. Name of the game and its release year
+
+Create a list game_year which will have a tuple with the Name of the Game and its Release Year.
+
+Example expected output:
+
+[('Wii Sports', 2006),
+ ('Super Mario Bros.', 1985),
+ ('Mario Kart Wii', 2008),
+ ('Wii Sports Resort', 2009),
+ ('Pokemon Red/Pokemon Blue', 1996),...]
+
+=> game_year = []
+
+for game in games:
+    name = game['name']
+    year = game['year']
+    game_year.append((name, year))
+
+game_year
+
+
+11. Calculate the total sales (sum of na_sales, eu_sales, jp_sales, other_sales) for each platform
+
+Create a new variable named total_sales_by_platform that contains the platform names as keys and their corresponding total sales as values.
+
+Example of expected output:
+
+{'Wii': Decimal('909.20'),
+ 'NES': Decimal('251.05'),
+ 'GB': Decimal('254.43'),
+ 'DS': Decimal('817.89'),
+ 'X360': Decimal('969.30'),
+ 'PS3': Decimal('949.39'),
+ 'PS2': Decimal('1233.56'),
+ 'SNES': Decimal('200.04'),
+ 'GBA': Decimal('304.99'),
+ '3DS': Decimal('246.17'),
+ 'PS4': Decimal('278.16'),
+ ...}
+
+=> from decimal import Decimal
+
+total_sales_by_platform = {}
+
+for game in games:
+    platform = game['platform']
+    total_sales = Decimal(str(game['na_sales'])) + Decimal(str(game['eu_sales'])) + Decimal(str(game['jp_sales'])) + Decimal(str(game['other_sales']))
+    total_sales_by_platform.setdefault(platform, Decimal('0'))
+    total_sales_by_platform[platform] += total_sales
+
+total_sales_by_platform
+
+
+12. Map Game Titles to their Release Years
+
+Create a dictionary year_game where the keys will be the year and the values will be the list of games released in that year.
+
+Example of expected output
+
+{2006: ['Wii Sports',
+  'Gears of War',
+  'Pokemon Diamond/Pokemon Pearl',
+  'New Super Mario Bros.',
+  'Wii Play',
+  'Final Fantasy XII',
+  'Brain Age: Train Your Brain in Minutes a Day',
+   ...],
+ 2008: ['Mario Kart Wii',
+  'Grand Theft Auto IV',
+  'Wii Fit',
+   ...],
+   ...
+}
+
+=> year_game = {}
+
+for game in games:
+    year = game['year']
+    name = game['name']
+    year_game.setdefault(year, [])
+    year_game[year].append(name)
+
+year_game
+
+
+13. Determine the platforms associated with each publisher
+
+Create a dictionary publisher_platform where the keys will be the publisher and the values will be the list of platforms associated with that publisher.
+
+Example of expected output:
+
+{   'Nintendo': ['Wii', 'NES', 'GB', 'DS', 'SNES', ... ],
+    'Microsoft Game Studios': ['X360', 'PC', 'XOne', 'XB', 'XBL', ... ],
+    'Take-Two Interactive': ['PS2', 'PS3', 'X360', 'PS4', 'PC', ... ],
+    'Sony Computer Entertainment': ['PS', 'PS2', 'PS3', 'PS4', 'PSP', ... ],
+    'Activision': ['PS2', 'PS3', 'X360', 'PS', 'Wii', ... ],
+     ...
+}
+
+=> publisher_platform = {}
+
+for game in games:
+    publisher = game['publisher']
+    platform = game['platform']
+    publisher_platform.setdefault(publisher, set())
+    publisher_platform[publisher].add(platform)
+
+# Convert the sets back to lists for better readability and consistency with the requested output format
+for publisher, platforms in publisher_platform.items():
+    publisher_platform[publisher] = list(platforms)
+
+publisher_platform
+
+
+14. Normalize the games collection
+
+we have a variable called games that contains details of various video games, such as their names, platforms, release years, genres, publishers, and sales figures in different regions. However, we noticed that some games share the same year, platform, genre, and publisher, leading to duplicate entries in the dataset.
+
+To address this issue, you will create a new variable called normalized_games in a way that it contains all the unique games' details without any duplications based on the combination of year, platform, genre, and publisher.
+
+Expected structure of the normalized_games variable:
+
+normalized_games = {
+    year: {
+        platform: {
+            genre: {
+                publisher: {
+                    games: [
+                        {
+                            'name': name,
+                            'na_sales': na_sales,
+                            'eu_sales': eu_sales,
+                            'jp_sales': jp_sales,
+                            'other_sales': other_sales,
+                            'global_sales': global_sales
+                        },
+                        ...
+                    ]
+                }
+            }
+        }
+    }
+}
+
+=> normalized_games = {}
+
+for game in games:
+    year = game['year']
+    platform = game['platform']
+    genre = game['genre']
+    publisher = game['publisher']
+    name = game['name']
+    na_sales = game['na_sales']
+    eu_sales = game['eu_sales']
+    jp_sales = game['jp_sales']
+    other_sales = game['other_sales']
+    global_sales = game['global_sales']
+    normalized_games.setdefault(year, {})
+    normalized_games[year].setdefault(platform, {})
+    normalized_games[year][platform].setdefault(genre, {})
+    normalized_games[year][platform][genre].setdefault(publisher, {'games': []})
+    normalized_games[year][platform][genre][publisher]['games'].append({
+        'name': name,
+        'na_sales': na_sales,
+        'eu_sales': eu_sales,
+        'jp_sales': jp_sales,
+        'other_sales': other_sales,
+        'global_sales': global_sales
+    })
+
+normalized_games
+
+
+15. Identify the top 3 platforms with the highest average sales per game, considering only platforms that have released at least 50 games.
+
+Create a sorted list named top_3_platforms with the top 3 platforms with the highest average sales per game, considering only platforms that have released at least 50 games.
+
+=> platform_sales = {}
+
+for game in games:
+    platform = game['platform']
+    global_sales = game['global_sales']
+    if platform not in platform_sales:
+        platform_sales[platform] = []
+    platform_sales[platform].append(global_sales)
+
+# Create a new dictionary to store platforms with more than 50 entries
+filtered_platform_sales = {}
+for platform, sales in platform_sales.items():
+    if len(sales) >= 50:
+        filtered_platform_sales[platform] = sum(sales) / len(sales)
+
+# Get the top 3 platforms
+top_3_platforms = sorted(filtered_platform_sales, key=filtered_platform_sales.get, reverse=True)[:3]
+
+print(top_3_platforms)
+
+
+16. Determine the genre that has the highest total sales in North America and Europe combined.
+
+Enter the name of the genre with highest total sales in North America and Europe as a string.
+
+=> Action
+
+genre_sales = {}
+
+for game in games:
+    genre = game['genre']
+    na_sales = game['na_sales']
+    eu_sales = game['eu_sales']
+    genre_sales.setdefault(genre, 0)
+    genre_sales[genre] += na_sales + eu_sales
+
+top_genre = max(genre_sales, key=genre_sales.get)
+print(top_genre)
+
+
+17. Calculate the average sales for each publisher
+
+Create a dictionary publisher_avg_sales where the keys will be the publisher and the values will be the average sales for each publisher. Average sales will be the Publisher's Global_Sales / Total Global_Sales.
+
+Example of expected output:
+
+
+{'Nintendo': Decimal('0.2025006894031641051887375922'),
+ 'Microsoft Game Studios': Decimal('0.02789274135068548803502508520'),
+ 'Take-Two Interactive': Decimal('0.04531336352711141776469960747'),
+ 'Sony Computer Entertainment': Decimal('0.06891535037000806857036508295'),
+...
+}
+
+=> from decimal import Decimal
+
+publisher_sales = {}
+
+# Assuming 'games' is a list of dictionaries, each representing a game
+for game in games:
+    publisher = game['publisher']
+    global_sales = Decimal(str(game['global_sales']))  # Convert to Decimal for precision
+    publisher_sales.setdefault(publisher, Decimal('0'))
+    publisher_sales[publisher] += global_sales
+
+total_global_sales = Decimal('0')
+
+# Calculate the total global sales using a for loop
+for sales in publisher_sales.values():
+    total_global_sales += sales
+
+publisher_avg_sales = {}
+
+# Calculate the publisher average sales using a for loop
+for publisher, sales in publisher_sales.items():
+    publisher_avg_sales[publisher] = sales / total_global_sales
+
+publisher_avg_sales
+
+
+18. Find 5 games which have the highest rank among all games, and store the rank, name and genre as tuples in the list top_ranked
+
+Create a list top_ranked which will have a tuple containing the rank, names, and the genre of the selected games.
+
+Example of expected output:
+
+[(1, 'Wii Sports', 'Sports'),
+ (2, 'Super Mario Bros.', 'Platform'),
+ (3, 'Mario Kart Wii', 'Racing'),...]
+
+=> top_ranked = []
+
+for game in games:
+    rank = game['rank']
+    name = game['name']
+    genre = game['genre']
+    top_ranked.append((rank, name, genre))
+
+top_ranked = sorted(top_ranked, key=lambda x: x[0])[:5]
+
+top_ranked
+
+
+19. Determine the Top Genre with the Highest Global Sales
+
+Construct a sorted list named top_genre, consisting of genres with the highest average sales per game. Only consider games that have been released in the last 10 years.
+
+Note: 'last 10 year' corresponds to the last decade based on the latest year present in the dataset.
+
+Expected output:
+
+['Shooter', 
+ 'Platform',
+  ...
+]
+
+=> top_genre = []
+
+# Find the latest year
+latest_year = 0
+for game in games:
+    year = game['year']
+    if year > latest_year:
+        latest_year = year
+
+genre_sales = {}
+
+# Calculate genre sales for the last 10 years
+for game in games:
+    year = game['year']
+    genre = game['genre']
+    global_sales = game['global_sales']
+    if year >= latest_year - 10:
+        if genre not in genre_sales:
+            genre_sales[genre] = []
+        genre_sales[genre].append(global_sales)
+
+# Calculate average sales for each genre
+for genre, sales in genre_sales.items():
+    total_sales = 0
+    num_games = len(sales)
+    for sale in sales:
+        total_sales += sale
+    average_sales = total_sales / num_games
+    genre_sales[genre] = average_sales
+
+# Sort the genres 
+sorted_genres = list(genre_sales.keys())
+sorted_genres.sort(key=genre_sales.get, reverse=True)
+top_genre = sorted_genres
+
+print(top_genre)
+
+
+20. Calculate the percentage contribution of each genre to the total global sales
+
+Create a dictionary genre_percentage_sales which contains the genre name as keys and the percentage contribution to the global sales as values.
+
+Example of expected output:
+
+{'Platform': 9.319831757177944,
+ 'Racing': 8.206321661263361,
+ 'Role-Playing': 10.39601185591744,
+ 'Puzzle': 2.7459407831900946,
+ 'Misc': 9.07982117474026,...}
+
+=> # Initialize an empty dictionary to store genre-wise sales
+genre_percentage_sales = {}
+
+# Calculate the total global sales
+total_global_sales = 0
+for game in games:
+    total_global_sales += game['global_sales']
+
+# Calculate genre-wise sales
+for game in games:
+    genre = game['genre']
+    global_sales = game['global_sales']
+    # If the genre doesn't exist in the dictionary, set it to 0
+    if genre not in genre_percentage_sales:
+        genre_percentage_sales[genre] = 0
+    # Add the global sales of the game to the genre's sales
+    genre_percentage_sales[genre] += global_sales
+
+# Calculate the percentage of sales for each genre
+for genre, sales in genre_percentage_sales.items():
+    genre_percentage_sales[genre] = (sales / total_global_sales) * 100
+
+# Print the genre-wise percentage sales
+print(genre_percentage_sales)
+
+
+21. 
+Determine How Many Publishers Published the Top 100 Games
+
+In this activity, you are being tasked to compute the number of unique publishers who have had their games ranked in the top 100 list. The count should be returned as an integer. The ranking of the games should be considered in your selection.
+
+=> 11
+
+top_100_games_publishers = set()
+
+# Select the top 100 games based on the rank(1-100, first 100 games)
+for game in games[:100]:
+    top_100_games_publishers.add(game['publisher'])
+
+len(top_100_games_publishers)
+
+
+22. How many games are published by each publisher
+
+Create a list publisher_game_count which will have a tuple with the Name of the Publisher and the number of games published by that publisher.
+
+Example expected output:
+
+[('Nintendo', 703),
+ ('Microsoft Game Studios', 189),
+ ('Take-Two Interactive', 413),
+ ('Sony Computer Entertainment', 409),
+  ...
+]
+
+=> publishers = []
+
+for game in games:
+    publisher = game['publisher']
+    publishers.append(publisher)
+
+publisher_game_count = []
+
+for publisher in set(publishers):
+    publisher_game_count.append((publisher, publishers.count(publisher)))
+
+publisher_game_count
