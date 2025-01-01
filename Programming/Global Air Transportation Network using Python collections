@@ -1,0 +1,293 @@
+1. Find Active Airlines
+
+Find and store the names of active airlines from the airlines data in a list named active_airlines. An airline is considered active if its Active column value is Y.
+
+=> active_airlines = []
+for airline_id, airline_details in airlines.items():
+    if airline_details[-1] == 'Y':
+        active_airlines.append(airline_details[0])
+
+active_airlines
+
+
+2. 
+Find Airport Cities
+
+Create a set containing the names of cities with at least one airport from the airports data. Store the set in a variable named airport_cities.
+
+=> airport_cities = set()
+# Iterate over cities in 'airports' dictionary
+for city_name in airports.keys():
+    airport_cities.add(city_name)
+
+airport_cities
+
+
+3. Count Airplanes per IATA Code
+
+Create a dictionary named airplane_counts that contains the number of airplanes for each IATA code in the airplanes data. The IATA code is the first element in each list in the airplanes data.
+ 
+=>  airplane_counts = {}
+for airplane_name, airplane_codes in airplanes.items():
+    iata_code = airplane_codes[0]
+    if iata_code in airplane_counts:
+        airplane_counts[iata_code] += 1
+    else:
+        airplane_counts[iata_code] = 1
+
+print(airplane_counts)
+
+
+4. 
+Count Airlines per Country
+
+Count the number of airlines operating in each country from the airlines data. Store the counts in a dictionary named country_airline_counts. The country name is the last element in each list in the airlines data.
+
+=> country_airline_counts = {}
+for airline_id, airline_details in airlines.items():
+    country = airline_details[4]
+    if country in country_airline_counts:
+        country_airline_counts[country] += 1
+    else:
+        country_airline_counts[country] = 1
+
+country_airline_counts
+
+
+5. Find all airlines that fly to a specific city.
+
+Create a function named find_airlines_flying_to_city that takes a city name as a parameter and returns a list of airline names that fly to that city.
+
+=> def find_airlines_flying_to_city(city_name):
+    # find all the IATA codes for specific city from `airports`
+    city_airport_codes = []
+    for city, airport in airports.items():
+        if city == city_name:
+            for airport_id, airport_details in airport.items():
+                city_airport_codes.append(airport_details[0])
+
+    # find all the airline IDs that fly to the city(unsing IATA in `routes`)
+    city_airline_ids = []
+    for route in routes:
+        if route['Source airport'] in city_airport_codes:
+            city_airline_ids.append(route['Airline ID'])
+
+    # find all the airline names that fly to the city (using airline IDs in `airlines`)
+    city_airline_names = []
+    for airline_id, airline_details in airlines.items():
+        if int(airline_id) in city_airline_ids:
+            city_airline_names.append(airline_details[0])
+
+    return city_airline_names
+
+
+print(find_airlines_flying_to_city('Sydney'))
+
+
+6. alculate the total number of airlines operating in each city and present the result in descending order based on the count.
+
+In this task, you will calculate the total number of airlines operating in each city and present the result in descending order based on the count. The output should be a list of tuples in the following format:
+
+[('London', 25), ('Paris', 23), ('New York', 22), ('Sydney', 15)]
+The first element in the tuple is the city name and the second element is the number of airlines operating in that city. The list should be sorted in descending order based on the number of airlines. If two cities have the same number of airlines, they should be sorted in alphabetical order.
+
+You have to store the result in a variable called airlines_per_city.
+
+If there is no airline operating in a city, the city should not be included in the result.
+
+=> airlines_per_city = []
+# iterate through each city
+for city, airport in airports.items():
+    # find all the IATA codes for specific city from `airports` 
+    city_airport_codes = []
+    for airport_id, airport_details in airport.items():
+        city_airport_codes.append(airport_details[0])
+
+    # find all the airline IDs that fly to the city(using IATA in `routes`)
+    city_airline_ids = []
+    for route in routes:
+        if route['Source airport'] in city_airport_codes:
+            city_airline_ids.append(route['Airline ID'])
+
+    # find all the airline names that fly to the city (using airline IDs in `airlines`)
+    city_airline_names = []
+    for airline_id, airline_details in airlines.items():
+        if int(airline_id) in city_airline_ids:
+            city_airline_names.append(airline_details[0])
+
+    # add the city and the number of airlines to the list
+    if len(city_airline_names) > 0:
+        airlines_per_city.append((city, len(city_airline_names)))
+
+airlines_per_city.sort(key=lambda x: (-x[1], x[0]))
+
+print(airlines_per_city)
+
+
+7. 
+Find Airports with Multiple Airlines
+
+Write a function find_airports_with_multiple_airlines that takes the routes list and the airports dictionary as inputs and returns a list of airport names that have flights operated by multiple airlines.
+
+Input: * routes (list): A list of dictionaries containing the route information.
+
+Example: `routes[0]` returns
+
+```python
+{'Airline': '2P',
+'Airline ID': 897,
+'Source airport': 'GES',
+'Source airport ID': 2402,
+'Destination airport': 'MNL',
+'Destination airport ID': 2397,
+'Stops': 3}
+```
+airports (dict): A dictionary containing the airport information. Example: airports['Goroka'] returns
+
+python
+{'1': ['GKA', 'AYGA', [-6.0816898345900015, 145.391998291]]}
+
+=> def find_airports_with_multiple_airlines(routes, airports):
+    # create a dictionary to store the route count for each airport
+    airport_route_count = {}
+
+    # iterate through each route
+    for route in routes:
+        # get the source and destination airports
+        source_airport = route['Source airport']
+        destination_airport = route['Destination airport']
+
+        # increment the route count for the source airport
+        if source_airport not in airport_route_count:
+            airport_route_count[source_airport] = 1
+        else:
+            airport_route_count[source_airport] += 1
+
+        if destination_airport not in airport_route_count:
+            airport_route_count[destination_airport] = 1
+        else:
+            airport_route_count[destination_airport] += 1
+
+    # create a list of airports with multiple airlines
+    airports_with_multiple_airlines = []
+    for airport, count in airport_route_count.items():
+        if count > 1:
+            airports_with_multiple_airlines.append(airport)
+    return airports_with_multiple_airlines
+
+
+find_airports_with_multiple_airlines(routes, airports)
+
+
+8. 
+Find Airlines with the Most Active Routes
+
+Create a list airlines_with_most_active_routes that contains the names of the airlines with the most active routes (i.e., the most number of routes). The list should be sorted in descending order of the number of routes and then in ascending order of the airline name. Each item in the list should be a tuple containing the airline name and the number of routes. For example, the first item in the list should be ('United Airlines', 10828).
+
+=> airline_route_count = {}
+
+# count the number of routes for each airline
+for route in routes:
+    airline_id = route['Airline ID']
+    if airline_id not in airline_route_count:
+        airline_route_count[airline_id] = 1
+    else:
+        airline_route_count[airline_id] += 1
+
+# create a list of airlines with the most active routes
+airlines_with_most_active_routes = []
+
+# iterate through each airline
+for airline_id, route_count in airline_route_count.items():
+    if str(airline_id) not in airlines:
+        continue
+    # get the airline name
+    airline_name = airlines[str(airline_id)][0]
+    # add the airline name and route count to the list
+    airlines_with_most_active_routes.append((airline_name, route_count))
+
+airlines_with_most_active_routes.sort(key=lambda x: (-x[1], x[0]))
+airlines_with_most_active_routes
+
+
+9. 
+Stops with routes
+
+Create a dictionary stops_with_routes that maps the number of stops to the number of routes. For example, the dictionary should contain the following items:
+
+{
+    0: 670,
+    1: 161,
+    2: 38,
+    3: 1
+}
+
+=> stops_with_routes = {}
+
+for route in routes:
+    stops = route['Stops']
+    if stops not in stops_with_routes:
+        stops_with_routes[stops] = 1
+    else:
+        stops_with_routes[stops] += 1
+
+stops_with_routes
+
+
+10. 
+Map Stops with Source and Designation
+
+Create a dictionary stops_with_source_and_destination that maps the number of stops to a list of tuples containing the source and destination airports. For example, the dictionary should contain the following items:
+
+{
+    0: [('AER', 'KZN'), ('ASF', 'KZN'), ('ASF', 'MRV'), ...],
+    1: [('KZN', 'AER'), ('KZN', 'ASF'), ('KZN', 'CEK'), ...],
+    2: [('CEK', 'KZN'), ('CEK', 'OVB'), ('CEK', 'SVX'), ...],
+    3: [('OVB', 'CEK')],
+    ...
+}
+
+=> stops_with_source_and_destination = {}
+
+for route in routes:
+    stops = route['Stops']
+    source = route['Source airport']
+    destination = route['Destination airport']
+    if stops not in stops_with_source_and_destination:
+        stops_with_source_and_destination[stops] = [(source, destination)]
+    else:
+        stops_with_source_and_destination[stops].append((source, destination))
+
+stops_with_source_and_destination
+
+
+11. ap Active Airlines with Stops
+
+Create a dictionary active_airlines_with_stops that maps the name of an airline from airlines dictionary to the number of stops from routes list in its routes. For example, the dictionary should contain the following items:
+
+{
+    'Aeroflot Russian Airlines': 1,
+    'Aerolineas Argentinas': 1,
+    'Aeromexico': 1,
+    ...
+}
+
+=> active_airlines = []
+
+for airline_id, airline in airlines.items():
+    if airline[-1] == 'Y':
+        active_airlines.append(airline_id)
+
+active_airlines_with_stops = {}
+
+for route in routes:
+    airline_id = route['Airline ID']
+    if str(airline_id) in active_airlines:
+        airline = airlines[str(airline_id)][0]
+        stops = route['Stops']
+        if airline not in active_airlines_with_stops:
+            active_airlines_with_stops[airline] = stops
+        else:
+            active_airlines_with_stops[airline] += stops
+
+active_airlines_with_stops
