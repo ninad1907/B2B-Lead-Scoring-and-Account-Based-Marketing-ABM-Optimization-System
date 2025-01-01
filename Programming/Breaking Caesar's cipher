@@ -1,0 +1,203 @@
+1. Shift letters by 5
+
+Shift the letters by 5 places to the right and store the result in the variable shift_5. Do NOT modify the letters variable.
+
+shift_5 will look something like: [F, G, H, ...]
+
+=> shift_5 = letters[5:] + letters[:5]
+
+
+2. Shift letters by -8
+
+Shift the letters by 8 places to the left (that is, -8 places) and store the result in the variable shift_minus_8. Do NOT modify the letters variable.
+
+shift_minus_8 will look something like: [S, T, U, ...]
+
+=> shift_minus_8 = letters[-8:] + letters[:-8]
+
+
+3. 
+Shift letters by 32
+
+Similar as before, but now we'll use 32 as shift. In this case, 32 will overflow and start counting all the way from the right.
+
+=> >>> 32 % 26
+6
+
+
+4. Write the function shift_letters
+
+The shift_letters function receives two parameters:
+
+letters: containing an alphabet, and
+shift: indicating the number of positions to shift (either right or left depending if the number is positive or negative)
+and returns a list of the letters variable shifted.
+
+So far, is pretty much the same as we did before. The only twist is that shift_letters should work with ANY alphabet passed in letters. For example, the Spanish alphabet contains the word Ñ, and it should work on the same way:
+
+#                                         V note the Ñ
+>>> spanish_letters = list("ABCDEFGHIJKLMNÑOPQRSTUVWXYZ")
+>>> shift_letters(list("ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"), 9)
+'JKLMNÑOPQRSTUVWXYZABCDEFGHI'
+
+=> def shift_letters(letters, shift):
+    shift = shift % len(letters)
+    return letters[shift:] + letters[:shift]
+
+
+5. 
+Write the function encrypt_simple
+
+The function encrypt_simple receives a word and a shift and returns the word encrypted using the Caesar's cipher technique explored so far. Examples:
+
+Note: we'll use only uppercase letters for now, and we won't introduce any characters outside of letters (no whitespaces, no special symbols or numbers).
+
+>>> encrypt_simple("DATAWARS", 5)
+'IFYFBFWX'
+
+>>> encrypt_simple("DATAWARS", -14)
+'PMFMIMDE'
+
+def encrypt_simple(word, shift):
+    letters = list(string.ascii_uppercase)
+    shifted = shift_letters(letters, shift)
+    mapping = {}
+    for letter, shifted in zip(letters, shifted):
+        mapping[letter] = shifted
+
+    new_word = ""
+    for char in word:
+        shifted_char = mapping[char]
+        new_word += shifted_char
+    return new_word
+
+
+6. 
+Write the function decrypt_simple
+
+Write the function decrypt_simple that receives an encrypted word and the original shift used to encrypt it, and returns it decrypted counterpart. Examples:
+
+>>> encrypt_simple("DATAWARS", 5)
+'IFYFBFWX'
+
+# Now we decrypt:
+>>> decrypt_simple("IFYFBFWX", 5)
+"DATAWARS"
+
+>>> encrypt_simple("DATAWARS", -14)
+'PMFMIMDE'
+
+# Now we decrypt:
+>>> decrypt_simple("PMFMIMDE", -14)
+"DATAWARS"
+
+=> def decrypt_simple(encrypted_word, origina_shift):
+    return encrypt_simple(encrypted_word, origina_shift * -1)
+
+
+7. fine the functions encrypt_full and decrypt_full
+
+Define the function encrypt_full that will receive ANY text and the shift and encrypt it. The key is to encrypt only ASCII chars (that is, the characters defined in string.ascii_lowercase and string.ascii_uppercase). Anything else, should remain "intact" (unencrypted). Example:
+
+>>> encrypt_full("DataWars is Great!", 9)
+'MjcjFjab rb Panjc!'
+
+# We can verify the encryption work by running:
+>>> encrypt_simple("DATAWARS", 9)
+'MJCJFJAB
+
+>>> encrypt_simple("IS", 9)
+'RB'
+
+>>> encrypt_simple("GREAT", 9)
+'PANJC
+
+Similarly, the function decrypt_full receives the encrypted text and the original shift, and returns the unencrypted version:
+
+>>> decrypt_full('MjcjFjab rb Panjc!', 9)
+'DataWars is Great!'
+
+=> def encrypt_full(text, shift):
+    lower_letters = list(string.ascii_lowercase)
+    shifted_lower = shift_letters(lower_letters, shift)
+    mapping_lower = {}
+    for letter, shifted in zip(lower_letters, shifted_lower):
+        mapping_lower[letter] = shifted
+
+    upper_letters = list(string.ascii_uppercase)
+    shifted_upper = shift_letters(upper_letters, shift)
+    mapping_upper = {}
+    for letter, shifted in zip(upper_letters, shifted_upper):
+        mapping_upper[letter] = shifted
+
+    new_word = ""
+    for char in text:
+        if char in mapping_lower:
+            new_word += mapping_lower[char]
+            continue
+
+        if char in mapping_upper:
+            new_word += mapping_upper[char]
+            continue
+        new_word += char
+
+    return new_word
+
+
+8. 
+Write a code breaker for a simple caesar cipher
+
+Now it's time to apply all our previous functions and some algorithmic brain power to break the cipher! This is the ultimate challenge for any criptographer.
+
+Implement the function break_cipher that breaks any encrypted message (encrypted_message) by finding a known word (known_word) in it.
+
+For simplicity, you can assume the message is ONLY uppercase ascii characters and whitespaces. No symbols or numbers. Example:
+
+We can start by encoding a message that we know the shift already:
+
+>>> encrypt_full("MY FAVORITE WEBSITE IS DATAWARS SO MANY GREAT PROJECTS", 9)
+'VH OJEXARCN FNKBRCN RB MJCJFJAB BX VJWH PANJC YAXSNLCB'
+
+'VH OJEXARCN FNKBRCN RB MJCJFJAB BX VJWH PANJC YAXSNLCB'
+We know that the encrypted message has (somewhere) the word "DATAWARS", so the break_cipher function should work as follows:
+
+>>> break_cipher('VH OJEXARCN FNKBRCN RB MJCJFJAB BX VJWH PANJC YAXSNLCB', "DATAWARS")
+'MY FAVORITE WEBSITE IS DATAWARS SO MANY GREAT PROJECTS'
+Seems like magic! Somehow, our break_cipher function was able to find the known word DATAWARS in the encrypted message and break the code.
+
+=> def extract_text_pattern(text):
+    prev_char = None
+    prev_pos = None
+
+    pattern = []
+    for char in text:
+        if char not in letters:
+            prev_char = None
+            prev_pos = None
+            continue
+        char_pos = letters.index(char)
+        if prev_char != None:
+            r = char_pos - prev_pos
+            if r < 0:
+                r += len(letters)
+            pattern.append(r)
+        prev_char = char
+        prev_pos = char_pos
+    return pattern
+
+def break_cipher(encrypted_message, known_word="DATAWARS"):
+    letters = list(string.ascii_uppercase)
+
+    known_pattern = extract_text_pattern(known_word)
+    encrypted_words = encrypted_message.split(" ")
+
+    for word in encrypted_words:
+        word_pattern = extract_text_pattern(word)
+        if word_pattern == known_pattern:
+            break
+    else:
+        raise ValueError("Can't decrypt message. Pattern not found.")
+    known_char_pos = letters.index(known_word[0])
+    found_char_pos = letters.index(word[0])
+    shift = found_char_pos - known_char_pos
+    return decrypt_full(encrypted_message, shift)
