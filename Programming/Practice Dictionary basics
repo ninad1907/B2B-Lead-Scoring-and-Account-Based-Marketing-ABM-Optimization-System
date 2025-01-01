@@ -1,0 +1,208 @@
+1. Access the values using key
+
+Find the height of the player 'LeBron James' from the dictionary players_data and store it in a variable lebron_height.
+
+=> lebron_height = players_data['LeBron James']['height']
+
+
+2. Add a new player to the player data dictionary
+
+Add a new player to the dictionary players_data. The new player is Stephen Curry and his data is given below:
+
+{'jersey': 30,
+ 'team': 'Golden State Warriors',
+ 'position': 'PG',
+ 'rating': 97,
+ 'salary': 40231758,
+ 'height': '6-3 / 1.91',
+ 'weight': '185 lbs',
+ 'dob': 'March 14, 1988',
+ 'country': 'USA',
+ 'college': 'Davidson',
+ 'draft_year': 2009,
+ 'draft_round': 1,
+ 'draft_peak': 7}
+
+=> players_data['Stephen Curry'] = {'jersey': 30,
+ 'team': 'Golden State Warriors',
+ 'position': 'PG',
+ 'rating': 97,
+ 'salary': 40231758,
+ 'height': '6-3 / 1.91',
+ 'weight': '185 lbs',
+ 'dob': 'March 14, 1988',
+ 'country': 'USA',
+ 'college': 'Davidson',
+ 'draft_year': 2009,
+ 'draft_round': 1,
+ 'draft_peak': 7}
+
+
+
+3. Remove the salary value for 'Kevin Durant'
+
+Remove the salary value for the player Kevin Durant from the dictionary players_data.
+
+=> del players_data['Kevin Durant']['salary']
+
+
+
+4. Access the keys and values of dictionary
+
+Create a list named players_names which contains the names of all the players in the dictionary players_data. Create another list named players_details which contains every details of all the players in the dictionary players_data. The details of the players should be in the form of a dictionary.
+
+The output of the list players_names and players_details should be as follows:
+
+=> players_names = ['LeBron James', 'Kevin Durant', 'Stephen Curry']
+
+players_details = [{'rating': 97,
+  'jersey': '#23',
+  'team': 'Los Angeles Lakers',
+  'position': 'F',
+  'b_day': '12/30/84',
+  'height': '6-9 / 2.06',
+  'weight': '250 lbs. / 113.4 kg.',
+  'salary': '$37436858',
+  'country': 'USA',
+  'draft_year': 2003,
+  'draft_round': 1,
+  'draft_peak': 1,
+  'college': nan,
+  'version': 'NBA2k20'},
+  {'rating': 96,
+  'jersey': '#7',
+  'team': 'Brooklyn Nets',
+  'position': 'F',
+  'b_day': '09/29/88',
+  'height': '6-10 / 2.08',
+  'weight': '240 lbs. / 108.9 kg.',
+  'salary': '$37199000',
+  'country': 'USA',
+  'draft_year': 2007,
+  'draft_round': 1,
+  'draft_peak': 2,
+  'college': 'Texas',
+  'version': 'NBA2k20'},
+  ...
+  ]
+
+=> players_names = list(players_data.keys())
+players_details = list(players_data.values())
+
+
+
+5. Find the number of players in the player data dictionary
+
+How many players are there in the dictionary players_data?
+
+=> len(players_data)
+
+
+
+6. Create a new dictionary players_rating
+
+Create a dictionary named players_rating which contains the names of the players as keys and the rating of the players as values. The dictionary should contain the rating of all the players in the dictionary players_data.
+
+The output of the dictionary players_rating should be as follows:
+
+players_rating = {'LeBron James': 97,
+ 'Kevin Durant': 96,
+ 'Stephen Curry': 95,
+ 'James Harden': 95,
+ 'Kawhi Leonard': 95,
+ 'Giannis Antetokounmpo': 96,
+ 'Anthony Davis': 94,
+ ...}
+
+=> players_rating = {}
+for name, details in players_data.items():
+    players_rating[name] = details['rating']
+
+
+
+7. Check if value is present or not in the dictionary
+
+Check if the 'Joel Embiid' and 'Jimmy' are present in the dictionary players_data
+
+=> print('Joel Embiid' in players_data)
+print('Jimmy' in players_data)
+
+
+
+8. Merge two dictionaries
+
+Merge below two dictionaries into a single dictionary named players_data_merged. First dictionary containing player stats and second dictionary containing player salaries.
+
+player_stats = {'LeBron James': {'rating': 97, 'jersey': '#23', 'team': 'Los Angeles Lakers', 'position': 'F', 'b_day': '12/30/84', 'height': '6-9 / 2.06', 'weight': '250 lbs. / 113.4 kg.', 'country': 'USA', 'draft_year': 2003, 'draft_round': 1, 'draft_peak': 1, 'college': None},
+                'Kawhi Leonard': {'rating': 97, 'jersey': '#2', 'team': 'Los Angeles Clippers', 'position': 'F', 'b_day': '06/29/91', 'height': '6-7 / 2.01', 'weight': '225 lbs. / 102.1 kg.', 'country': 'USA', 'draft_year': 2011, 'draft_round': 1, 'draft_peak': 15, 'college': 'San Diego State'},
+                'Giannis Antetokounmpo': {'rating': 96, 'jersey': '#34', 'team': 'Milwaukee Bucks', 'position': 'F-G', 'b_day': '12/06/94', 'height': '6-11 / 2.11', 'weight': '242 lbs. / 109.8 kg.', 'country': 'Greece', 'draft_year': 2013, 'draft_round': 1, 'draft_peak': 15, 'college': None},
+                'Kevin Durant': {'rating': 96, 'jersey': '#7', 'team': 'Brooklyn Nets', 'position': 'F', 'b_day': '09/29/88', 'height': '6-10 / 2.08', 'weight': '230 lbs. / 104.3 kg.', 'country': 'USA', 'draft_year': 2007, 'draft_round': 1, 'draft_peak': 2, 'college': 'Texas'},
+                'James Harden': {'rating': 96, 'jersey': '#13', 'team': 'Houston Rockets', 'position': 'G', 'b_day': '08/26/89', 'height': '6-5 / 1.96', 'weight': '220 lbs. / 99.8 kg.', 'country': 'USA', 'draft_year': 2009, 'draft_round': 1, 'draft_peak': 3, 'college': 'Arizona State'}}
+
+
+player_salaries = {'LeBron James': '$37436858', 'Kawhi Leonard': '$32742000', 'Giannis Antetokounmpo': '$25842697', 'Kevin Durant': '$37199000', 'James Harden': '$38199000'}
+
+=> players_data_merged == {'LeBron James': {'rating': 97, 'jersey': '#23', 'team': 'Los Angeles Lakers', 'position': 'F', 'b_day': '12/30/84', 'height': '6-9 / 2.06', 'weight': '250 lbs. / 113.4 kg.', 'country': 'USA', 'draft_year': 2003, 'draft_round': 1, 'draft_peak': 1, 'college': None, 'salary': '$37436858'},
+
+...
+}
+
+
+9. Update the values for 'Mike Conley'
+
+Update the rating and salary for 'Mike Conley' in the players_data dictionary to 95 and '$34,000,000' respectively.
+
+=> players_data['Mike Conley'].update({'rating': 95, 'salary': '$34,000,000'})
+
+
+
+10. Create a new dictionary with specific country
+
+Create a new dictionary players_data_usa with the players from the USA which contains the player name as the key and list of rating and team as the value.
+
+The result of the players_data_usa should look like this:
+
+{'LeBron James': [97, 'Los Angeles Lakers'],
+ 'Kawhi Leonard': [97, 'Los Angeles Clippers'],
+ 'James Harden': [96, 'Houston Rockets'],
+ 'Kevin Durant': [96, 'Brooklyn Nets'],
+...
+}
+
+=> players_data_usa = {}
+for player in players_data:
+    if players_data[player]['country'] == 'USA':
+        players_data_usa[player] = [players_data[player]['rating'], players_data[player]['team']]
+
+
+
+11. 
+Create a new dictionary of teams from players_data
+
+Create a dictionary teams with the unique teams in the players_data dictionary as the key and the number of players in each team as the value.
+
+The result of the teams should look like this:
+
+{'Los Angeles Lakers': 2,
+ 'Los Angeles Clippers': 2,
+ 'Milwaukee Bucks': 3,
+ 'Brooklyn Nets': 2,
+...
+}
+
+=> teams = {}
+for player in players_data:
+    if players_data[player]['team'] in teams:
+        teams[players_data[player]['team']] += 1
+    else:
+        teams[players_data[player]['team']] = 1
+
+
+
+12. 
+Copy the dictionary and clear all the elements
+
+Copy the players_data dictionary to a new dictionary players_data_copy and clear all the elements from the players_data dictionary.
+
+=> players_data_copy = players_data.copy()
+players_data.clear()
