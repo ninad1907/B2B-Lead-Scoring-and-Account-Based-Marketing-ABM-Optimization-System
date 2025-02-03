@@ -1,0 +1,185 @@
+1. Plot a line chart of COVID-19 New Cases in Denmark
+   In this activity, you will create a line chart to analyze the trend of new COVID-19 cases in Denmark over time. The x-axis will represent the Date_reported, and the y-axis will display the number of new cases. The goal is to visualize how the number of cases fluctuated throughout the reported period in the dataset.
+   Figure size : 10 by 6
+   Title : New COVID-19 Cases in Denmark
+   x-axis label: Date
+   y-axis label: New Cases
+   Line label: "New Cases"
+A: fig, ax =  plt.subplots(figsize = (10,6))
+   ax.plot(Denmark['Date_reported'], Denmark['New_cases'])
+   # Add title and labels
+   ax.set_title('New COVID-19 Cases in Denmark')
+   ax.set_xlabel('Date')
+   ax.set_ylabel('New Cases')
+2. Visualizing the Distribution of Countries Across WHO Regions
+   In this activity, you will create a pie chart using the region_counts series to display the distribution of countries across different WHO regions from the dataset. Use the following parameters to format your chart:
+   Figure size: 8 x 8
+   Title: WHO Regions Distribution
+   Percentage display (autopct): %1.1f%%
+   Finally, apply .tight_layout() and display the plot.
+A: fig, ax = plt.subplots(figsize = (8,8))
+   ax.pie(region_counts, labels=region_counts.index, autopct='%1.1f%%')
+   ax.set_title('WHO Regions Distribution')
+   fig.tight_layout()
+3. Visualizing the Distribution of Cumulative Deaths
+   Plot a histogram to visualize the distribution of cumulative deaths using the Cumulative_deaths column. Use the following parameters to format your histogram:
+   Figure size : 10 by 6
+   Title: Distribution of Cumulative Deaths
+   x-axis label: Cumulative Deaths
+   y-axis label: Frequency
+   Color: Red
+   Bins : 10
+   Apply .tight_layout() and display the plot.
+A: fig, ax = plt.subplots(figsize = (10,6))
+   ax.hist(df['Cumulative_deaths'], color = 'red')
+   ax.set_title('Distribution of Cumulative Deaths')
+   ax.set_xlabel('Cumulative Deaths')
+   ax.set_ylabel('Frequency')
+   fig.tight_layout()
+4. Customized Line Plot of New COVID-19 Cases in Denmark
+   Redo the line plot of new COVID-19 cases in Denmark from the previous section using the series monthly_cases with the following customizations:
+   Figure size : 10 by 6
+   Line color: Green
+   Line style: --
+   Line width: 3
+   Title: New COVID-19 Cases in Denmark (Use font size 16 and set the font weight to bold)
+   x-axis : Date (Use font size 12)
+   y-axis labels: New Cases (Use font size 12)
+   x-axis rotation: Set the rotation of the x-axis labels to 45 degrees
+   Apply .tight_layout() and display your plot.
+A: # Customize the line plot with additional features
+   fig, ax = plt.subplots(figsize=(10,6))
+   # Plot the line with custom color, line style, and line width
+   ax.plot(monthly_cases.index, monthly_cases.values, color='green', linestyle='--', linewidth=3)
+   # Add title with custom font size and weight
+   ax.set_title('New COVID-19 Cases in Denmark', fontsize=16, fontweight='bold')
+   # Customize x and y labels with font size and rotation for the x-axis
+   ax.set_xlabel('Date', fontsize=12)
+   ax.set_ylabel('New Cases', fontsize=12)
+   ax.tick_params(axis='x', rotation=45)
+   fig.tight_layout()
+5. Customized Pie Chart of WHO Regions with EURO Slice Emphasized
+   In this task, you will create a pie chart to visualize the distribution of WHO regions, with a special emphasis on the EURO region by exploding its slice by a fraction of 0.1. Use the region_counts series and apply the following customizations:
+   Figure size : 8 by 8
+   Percentage display (autopct): %1.1f%%
+   Starting angle: 90 degrees
+   Colors: Defined in the notebook
+   Title formatting: Font size 16, bold font weight, and dark blue color for the title ("WHO Regions Distribution")
+   Explode the EURO slice to emphasize it
+   Additional settings:
+   Add a shadow effect
+   Ensure the pie chart is a perfect circle by setting the axis to equal
+   Use .tight_layout() for proper formatting and display the plot
+A: fig, ax = plt.subplots(figsize=(8, 8))
+   # Customize the pie chart with explosion, shadow, and colors
+   ax.pie(region_counts, labels=region_counts.index, autopct='%1.1f%%', explode=explode_values,
+       shadow=True, startangle=90, colors = color)
+   # Add a title with customization
+   ax.set_title('WHO Regions Distribution', fontsize=16, fontweight='bold', color='darkblue')
+   # Equal aspect ratio ensures the pie is drawn as a circle.
+   ax.axis('equal')
+   # Show the plot
+   fig.tight_layout()
+6. Histogram with Custom Bin Size
+   In this task, you will create a histogram to visualize the distribution of cumulative deaths, with customized bin size and formatting. Follow the steps below:
+   Figure size : 12 by 7
+   Bins: Divide the data into 15 bins
+   Bar color: Red, with black outlines
+   Transparency: Set alpha to 0.7 for the bars
+   Title: "Distribution of Cumulative Deaths" (Font size: 18, Font weight: bold, Color: dark blue)
+   x-axis label: "Cumulative Deaths" (Font size: 14, Color: purple)
+   y-axis label: "Frequency" (Font size: 14, Color: green)
+   Grid: Add dashed lines (--) with linewidth=0.6 and alpha=0.8
+A: # Create a customized histogram
+   fig, ax = plt.subplots(figsize=(12, 7))
+   # Plot the histogram with custom bins and edge color
+   ax.hist(df['Cumulative_deaths'], bins=15, color='red', edgecolor='black', alpha=0.7)
+   # Customize the title with a different font size and color
+   ax.set_title('Distribution of Cumulative Deaths', fontsize=18, fontweight='bold', color='darkblue')
+   # Customize the x and y axis labels with a new font size and color
+   ax.set_xlabel('Cumulative Deaths', fontsize=14, color='purple')
+   ax.set_ylabel('Frequency', fontsize=14, color='green')
+   # Add grid with custom style
+   ax.grid(True, linestyle='--', linewidth=0.6, alpha=0.8)
+   # Customize the x and y axis ticks for better readability
+   ax.tick_params(axis='x', labelsize=12, rotation=45)
+   ax.tick_params(axis='y', labelsize=12)
+   # Show the plot
+   fig.tight_layout()
+7. Create an Unfit Pie Chart Using Time Series Data
+   In this activity, you'll use the Series daily_cases to create a pie chart, despite it being an inappropriate choice for this data type. The goal is to highlight the limitations of using a pie chart for time series data like daily COVID-19 cases. Use the following parameters to plot the chart:
+     Figure size : 8 by 8 Start angle: 90 degrees Percentage display (autopct): %1.1f%% Title: "New COVID-19 Cases Over Time" Apply .tight_layout() and display the plot.
+A: fig, ax = plt.subplots(figsize=(8, 8))
+   ax.pie(daily_cases, labels=daily_cases.index, autopct='%1.1f%%', startangle=90)
+   ax.set_title('New COVID-19 Cases Over Time')
+   fig.tight_layout()
+8. Visualize New COVID-19 Cases by WHO Region Using a Bar Chart
+   Using the region_cases Series, which records the number of new COVID-19 cases in each WHO (World Health Organization) region, construct a bar chart to present this data visually.
+   Figure size: 8 x 6 Title: New COVID-19 Cases by WHO Region y-axis label: New Cases Apply .tight_layout() and display the plot.
+A: # Creating a bar chart without ordering
+   fig, ax = plt.subplots(figsize=(8, 6))
+   ax.bar(region_cases.index, region_cases)
+   ax.set_title('New COVID-19 Cases by WHO Region')
+   ax.set_ylabel('New Cases')
+   fig.tight_layout()
+9. Generate Incorrect Scatter Plot of Cumulative Cases
+   In this activity, you will generate a scatter plot to visualize the cumulative COVID-19 cases for countries within the EMRO region using the DataFrame case.
+   Figure size: 10 x 6 x-axis : Country, fontsize=12 y-axis : Cumulative Cases, fontsize=12 Color : green
+   Title: Cumulative Cases in EMRO (Incorrect - Scatter Plot), fontsize = 16 Rotate the x-axis labels by 45 degrees for better readability and use
+A: fig, ax = plt.subplots(figsize=(10,6))
+   ax.scatter(case['Country'], case['Cumulative_cases'], color='green')
+   ax.set_title('Cumulative Cases in EMRO (Incorrect - Scatter Plot)', fontsize=16)
+   ax.set_xlabel('Country', fontsize=12)
+   ax.set_ylabel('Cumulative Cases', fontsize=12)
+   ax.tick_params(axis='x', rotation=45)
+   plt.tight_layout()
+10. Why is it important to group your data or perform calculations on it before visualization?
+A:  It ensures the visualization is based on accurate and meaningful aggregated information.
+11. Why is it inappropriate to use a bar plot to represent continuous time-series data like daily new COVID-19 cases?
+A:  Bar plots imply discrete categories rather than continuous data, potentially misleading trends.
+12. Why is it more effective to use a heatmap rather than a bar chart when visualizing data like daily sales across different products and regions?
+A:  Heatmaps can display multiple dimensions of data simultaneously through color intensity.
+13. Create a Line Plot for New Cases and New Deaths with Custom Legends
+A:  fig, ax1 = plt.subplots(figsize=(10, 6))
+    # Plot New Cases on the first y-axis
+    ax1.plot(df_grouped.index, df_grouped['New_cases'], color='blue', linewidth=2, label='New Cases')
+    ax1.set_xlabel('Date Reported', fontsize=12)
+    ax1.set_ylabel('New Cases', color='blue', fontsize=12)
+    ax1.tick_params(axis='x', rotation=45)
+    ax1.tick_params(axis='y', labelcolor='blue')
+    # Creating the second y-axis for New Deaths
+    ax2 = ax1.twinx()
+    ax2.plot(df_grouped.index, df_grouped['New_deaths'], color='red', linewidth=2, label='New Deaths')
+    ax2.set_ylabel('New Deaths', color='red', fontsize=12)
+    ax2.tick_params(axis='y', labelcolor='red')
+    # Title
+    plt.title('New COVID-19 Cases and Deaths Over Time (7-Day Rolling Average)', fontsize=16)
+    # Legend
+    fig.legend(loc="upper left", bbox_to_anchor=(0.1,0.9), bbox_transform=ax1.transAxes, fontsize=12)
+    plt.tight_layout()
+14. Generate a Colormap Scatter Plot of New COVID-19 Cases
+    In this activity, you will create a visually engaging scatter plot to represent the trend of new COVID-19 cases over time, utilizing a colormap for better insight into the data. Use the scatter function to plot Date_reported on the x-axis and New_cases on the y-axis with the following parameters:
+    Figure size : 10 by 6
+    cmap : viridis
+    size : Set the size of the scatter points to 50.
+    alpha : 0.8 for slight transparency.
+    Colorbar Addition:Include a colorbar to provide a reference for the color mapping, labeling it as "Number of New Cases" to clarify the representation of color intensity.
+    Title : "Scatter Plot of New COVID-19 Cases" with a font size of 16 to ensure visibility.Label the x-axis as "Date Reported" and the y-axis as "New Cases," both with a font size of 12 for clarity.
+    Rotate the x-axis ticks by 45 degrees to improve readability of date labels, and use .tight_layout() to ensure all elements are displayed without overlap.
+A:  # Create the scatter plot 
+    fig, ax = plt.subplots(figsize=(10, 6))
+    # Scatter plot where the color is based on the 'new_cases' column using the 'viridis' colormap
+    scatter = ax.scatter(df['Date_reported'], df['New_cases'], 
+    c=df['New_cases'], cmap='viridis', s=50, alpha=0.8)
+    # Add a colorbar
+    cbar = fig.colorbar(scatter, ax=ax)
+    cbar.set_label('Number of New Cases')
+    # Add titles and labels
+    ax.set_title('Scatter Plot of New COVID-19 Cases', fontsize=16)
+    ax.set_xlabel('Date Reported', fontsize=12)
+    ax.set_ylabel('New Cases', fontsize=12)
+    # Rotate the x-axis ticks for better readability
+    plt.xticks(rotation=45)
+    # Show the plot
+    plt.tight_layout()
+      
