@@ -1,0 +1,11 @@
+Q1. What is the primary advantage of using ensemble models in machine learning?**  
+A: The primary advantage of ensemble models is their ability to improve accuracy and generalization by combining the strengths of multiple models. They can reduce overfitting (in the case of bagging) or bias (in the case of boosting) and often lead to better performance than individual models.
+
+Q2. What are the most common types of ensemble models?**  
+A: The most common types of ensemble models are:  
+1. **Bagging**: Builds multiple independent models in parallel and combines their predictions (e.g., Random Forest).  
+2. **Boosting**: Builds models sequentially, with each model focusing on the errors made by previous models (e.g., AdaBoost, Gradient Boosting).  
+3. **Stacking**: Combines different types of models, where the predictions of base models are used as input to a final meta-model (e.g., Stacked Generalization).
+
+Q3. How does Random Forest work as an ensemble model?**  
+A: Random Forest is an ensemble of decision trees. It works by training multiple decision trees on random subsets of the data and features. Each tree makes an independent prediction, and the final prediction is obtained by averaging (for regression) or voting (for classification) on the predictions of all trees. This helps to reduce overfitting and improve generalization.
