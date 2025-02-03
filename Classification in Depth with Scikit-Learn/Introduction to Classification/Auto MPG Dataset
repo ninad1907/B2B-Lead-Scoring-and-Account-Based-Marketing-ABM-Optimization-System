@@ -1,0 +1,49 @@
+Step 1: Clean the Data and Compute the Correlation Matrix
+import pandas as pd
+# Assuming df is the dataset
+# Clean the data by removing missing or non-numeric values
+df = df.dropna()  # Remove rows with missing values
+# Compute the correlation matrix
+correlation_matrix = df.corr()
+# Display the correlation matrix
+print(correlation_matrix)
+
+Step 2: Identify the Variable with the Highest Correlation with the Target
+Based on the computed correlation matrix, identify the variable with the highest correlation with the target column (e.g., "mpg" if it's the target).
+# Find the variable with the highest correlation with the target (e.g., 'mpg')
+target_column = 'mpg'
+correlations = correlation_matrix[target_column]
+highest_corr_variable = correlations.drop(target_column).idxmax()
+print(f"The variable with the highest correlation with {target_column} is: {highest_corr_variable}")
+
+Step 3: Plot the Pairplot
+import seaborn as sns
+import matplotlib.pyplot as plt
+# Plot the pairplot of selected columns
+sns.pairplot(df[["mpg", "cylinders", "displacement", "weight"]], diag_kind="kde")
+plt.show()
+
+Step 4: Split the Data into Training and Testing Sets
+from sklearn.model_selection import train_test_split
+# Separate the features and target variable
+X = df[["cylinders", "displacement", "weight"]]
+y = df["mpg"]
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+Step 5: Train the Linear Regression Model
+from sklearn.linear_model import LinearRegression
+# Create and train the linear regression model
+lr = LinearRegression()
+lr.fit(X_train, y_train)
+
+Step 6: Make Predictions on the Test Set
+# Make predictions on the test set
+y_pred = lr.predict(X_test)
+
+Step 7: Visualize the Residuals
+# Plot the residuals
+sns.distplot(y_test - y_pred, bins=20)
+plt.legend()
+plt.title("Residuals")
+plt.show()
